@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Tic Tac Toe</h1>
+        <div class="settings">
+            <input type="text" id="player1-name" placeholder="Player 1 Name" value="Player 1">
+            <input type="text" id="player2-name" placeholder="Player 2 Name" value="Player 2">
+            <label>
+                <input type="checkbox" id="vs-computer"> Play vs Computer
+            </label>
+            <select id="difficulty" disabled>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <div class="scoreboard">
+            <span id="player1-score">Player 1: 0</span>
+            <span id="player2-score">Player 2: 0</span>
+        </div>
+        <div class="grid" id="grid">
+            <!-- 3x3 grid cells -->
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <div class="controls">
+            <button id="reset">Reset Scores</button>
+        </div>
+        <p id="current-player">Current Player: Player 1</p>
+    </div>
+    <div id="winner-animation" class="hidden">
+        <h2 id="winner-announcement">Winner!</h2>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
