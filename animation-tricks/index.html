@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATOMIC PARTICLE SYSTEM PRO - Cyberpunk Edition</title>
+    <link rel="stylesheet" href="styles-pro.css">
+</head>
+<body>
+    <!-- Main Canvas -->
+    <canvas id="canvas"></canvas>
+
+    <!-- Gesture Guide Modal -->
+    <div id="gestureModal">
+        <div class="modal-title">⚛️ NEURAL CONTROL</div>
+
+        <!-- Fist -->
+        <div class="gesture-section">
+            <div class="gesture-title">
+                <span class="gesture-icon">✊</span>
+                FIST COLLAPSE
+            </div>
+            <div class="gesture-description">
+                All particles violently accelerate to the center and turn white-hot. Creates a black hole effect.
+            </div>
+        </div>
+
+        <!-- Open Palm -->
+        <div class="gesture-section">
+            <div class="gesture-title">
+                <span class="gesture-icon">🖐️</span>
+                FINGERTIP MAGNETISM
+            </div>
+            <div class="gesture-description">
+                10,000 particles divide into 5 groups and follow your fingertips in real-time.
+            </div>
+        </div>
+
+        <!-- Victory -->
+        <div class="gesture-section">
+            <div class="gesture-title">
+                <span class="gesture-icon">✌️</span>
+                VICTORY MORPH
+            </div>
+            <div class="gesture-description">
+                Form a Saturn ring with auto-morphing and rotating orbital dynamics.
+            </div>
+        </div>
+
+        <!-- Neural Gestures -->
+        <div class="neural-instructions">
+            <div class="instruction-title">🎵 AUDIO REACTIVITY</div>
+            <div class="instruction-item">🔊 Bass → Shockwave Expansion</div>
+            <div class="instruction-item">🎶 Treble → Frequency Vibration</div>
+            <div class="instruction-item">🌈 Color → Dominant Frequency</div>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div id="controlPanel">
+        <div class="panel-title">⚙️ SHAPE CONTROL</div>
+        
+        <div class="button-group">
+            <button class="shape-btn" data-shape="heart">❤️ Heart</button>
+            <button class="shape-btn" data-shape="saturn">🪐 Saturn</button>
+            <button class="shape-btn" data-shape="flower">🌸 Flower</button>
+            <button class="shape-btn" data-shape="fireworks">✨ Fireworks</button>
+            <button class="shape-btn" data-shape="sphere">⚪ Sphere</button>
+            <button class="shape-btn" data-shape="dna">🧬 DNA</button>
+            <button class="shape-btn" data-shape="torus">🍩 Torus</button>
+        </div>
+
+        <!-- Hand Detection Status -->
+        <div class="hand-status">
+            <div class="status-dot" id="statusDot"></div>
+            <div class="status-text" id="handStatus">Initializing...</div>
+        </div>
+        <div class="info-text" style="margin-top: 10px; font-size: 9px; color: rgba(0, 251, 255, 0.6);">
+            Position your hand in front of the camera to activate neural control.
+        </div>
+    </div>
+
+    <!-- Webcam Preview -->
+    <div id="videoContainer">
+        <div class="video-label">📷 CAMERA</div>
+        <video id="video" autoplay playsinline muted></video>
+        <div class="video-loading">Initializing...</div>
+    </div>
+
+    <!-- Status Display -->
+    <div id="statusText">
+        <div class="status-line">
+            <span class="status-label">Particles:</span>
+            <span class="status-value"><span id="particleCount">0</span></span>
+        </div>
+        <div class="status-line">
+            <span class="status-label">FPS:</span>
+            <span class="status-value"><span id="fpsValue">0</span></span>
+        </div>
+    </div>
+
+    <!-- Waveform Visualizer -->
+    <div id="waveformContainer">
+        <div class="waveform-label">🎼 AUDIO SPECTRUM</div>
+        <canvas id="waveformCanvas"></canvas>
+    </div>
+
+    <!-- Auto Instruction Label -->
+    <div id="instructionLabel" style="display: none;"></div>
+
+    <!-- ========================================================================
+         SCRIPTS & INITIALIZATION
+         ======================================================================== -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="engine-v2.js"></script>
+
+    <script>
+        // ====================================================================
+        // GLOBAL STATE
+        // ====================================================================
+
+        let engine = null;
+        let handTracker = null;
+        let stats = null;
+        let animationRunning = false;
+        let currentShape = 'heart';
+        let analyser = null;
+        let audioContext = null;
+
+        const APP_CONFIG = {
+            particleCount: 10000
+        };
+
+        // ====================================================================
+        // INITIALIZATION
+        // ====================================================================
+
+        function waitForLibraries() {
+            return new Promise((resolve) => {
+                const checkLibraries = setInterval(() => {
+                    if (window.THREE && window.Hands) {
+                        clearInterval(checkLibraries);
+                        resolve();
+                    }
+                }, 100);
+            });
+        }
+
+        async function initApplication() {
+            try {
+                console.log('Starting initialization...');
+                await waitForLibraries();
+                console.log('Libraries loaded');
+
+                // Initialize Particle System Engine
+                engine = new ParticleSystemEngine(APP_CONFIG);
+                window.engine = engine;
+
+                console.log('Engine created');
+
+                // Initialize Hand Tracking
+                handTracker = new HandTrackingManager();
+                await handTracker.init();
+
+                console.log('Hand tracking initialized');
+
+                // Initialize Stats Manager
+                stats = new StatsManager(APP_CONFIG.particleCount);
+
+                // Setup Audio Analyzer
+                setupAudioAnalyzer();
+
+                // Setup UI Controls
+                setupUIControls();
+
+                // Setup Waveform Visualizer
+                setupWaveformVisualizer();
+
+                // Start animation loop
+                animationRunning = true;
+                animate();
+
+                console.log('Application ready!');
+
+            } catch (error) {
+                console.error('Application initialization failed:', error);
+                alert('Initialization failed. Check console for details.');
+            }
+        }
+
+        // ====================================================================
+        // UI CONTROLS
+        // ====================================================================
+
+        function setupUIControls() {
+            const buttons = document.querySelectorAll('.shape-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all
+                    buttons.forEach(b => b.classList.remove('active'));
+                    // Add active to clicked
+                    btn.classList.add('active');
+
+                    const shape = btn.dataset.shape;
+                    currentShape = shape;
+                    engine.changeShape(shape);
+                });
+            });
+
+            // Activate first button by default
+            if (buttons.length > 0) {
+                buttons[0].classList.add('active');
+            }
+        }
+
+        // ====================================================================
+        // AUDIO SETUP
+        // ====================================================================
+
+        function setupAudioAnalyzer() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 256;
+
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(stream => {
+                        const source = audioContext.createMediaStreamAudioSource(stream);
+                        source.connect(analyser);
+                        console.log('Audio analyzer connected');
+                    })
+                    .catch(err => console.log('Audio access denied:', err));
+            } catch (err) {
+                console.warn('Audio context not available:', err);
+            }
+        }
+
+        // ====================================================================
+        // WAVEFORM VISUALIZER
+        // ====================================================================
+
+        let waveformCanvas = null;
+        let waveformCtx = null;
+        let audioDataArray = null;
+
+        function setupWaveformVisualizer() {
+            waveformCanvas = document.getElementById('waveformCanvas');
+            waveformCtx = waveformCanvas.getContext('2d');
+            audioDataArray = new Uint8Array(analyser ? analyser.frequencyBinCount : 128);
+
+            // Set canvas size
+            waveformCanvas.width = waveformCanvas.offsetWidth;
+            waveformCanvas.height = waveformCanvas.offsetHeight;
+        }
+
+        function drawWaveform() {
+            if (!waveformCtx || !analyser) return;
+
+            analyser.getByteFrequencyData(audioDataArray);
+
+            // Clear canvas
+            waveformCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            waveformCtx.fillRect(0, 0, waveformCanvas.width, waveformCanvas.height);
+
+            // Draw waveform
+            const barWidth = waveformCanvas.width / audioDataArray.length;
+            let x = 0;
+
+            for (let i = 0; i < audioDataArray.length; i++) {
+                const value = audioDataArray[i];
+                const percent = value / 255;
+                const height = percent * waveformCanvas.height;
+
+                // Color gradient
+                const hue = (i / audioDataArray.length) * 360;
+                waveformCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                waveformCtx.fillRect(x, waveformCanvas.height - height, barWidth, height);
+
+                // Glow effect
+                waveformCtx.strokeStyle = `hsla(${hue}, 100%, 50%, 0.5)`;
+                waveformCtx.lineWidth = 2;
+                waveformCtx.strokeRect(x, waveformCanvas.height - height, barWidth, height);
+
+                x += barWidth;
+            }
+        }
+
+        // ====================================================================
+        // ANIMATION LOOP
+        // ====================================================================
+
+        function animate() {
+            if (!animationRunning) return;
+            requestAnimationFrame(animate);
+
+            if (!engine) return;
+
+            // Get hand data
+            const handData = handTracker ? handTracker.getHandData() : {
+                detected: false,
+                centerX: 0,
+                centerY: 0,
+                power: 0,
+                hue: 0,
+                zoomFactor: 0,
+                unzoomFactor: 0,
+                handState: 'NEUTRAL'
+            };
+
+            // Update particle system
+            engine.updatePositions(handData);
+
+            // Update waveform
+            drawWaveform();
+
+            // Update status
+            if (stats) {
+                stats.update(APP_CONFIG.particleCount, handData);
+            }
+
+            updateStatusDot(handData.detected);
+
+            // Render
+            engine.render();
+        }
+
+        function updateStatusDot(detected) {
+            const dot = document.getElementById('statusDot');
+            if (detected) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        }
+
+        // ====================================================================
+        // WINDOW EVENTS
+        // ====================================================================
+
+        window.addEventListener('resize', () => {
+            if (engine) engine.onWindowResize();
+            if (waveformCanvas) {
+                waveformCanvas.width = waveformCanvas.offsetWidth;
+                waveformCanvas.height = waveformCanvas.offsetHeight;
+            }
+        });
+
+        window.addEventListener('beforeunload', () => {
+            animationRunning = false;
+        });
+
+        // ====================================================================
+        // START
+        // ====================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initApplication();
+        });
+    </script>
+</body>
+</html>

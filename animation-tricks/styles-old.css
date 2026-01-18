@@ -1,0 +1,550 @@
+/* ============================================================================
+   GLOBAL STYLES - Blue Futuristic Theme
+   ============================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', 'JetBrains Mono', monospace;
+    background: linear-gradient(135deg, #0a0e27 0%, #0d111f 50%, #0a0e27 100%);
+    color: #00d9ff;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ============================================================================
+   CANVAS
+   ============================================================================ */
+
+#canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================================================
+   GESTURE GUIDE MODAL
+   ============================================================================ */
+
+#gestureModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 39, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: modalFadeIn 0.6s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #0f1a3d 0%, #1a2847 100%);
+    border: 2px solid #00d9ff;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 50px rgba(0, 217, 255, 0.3), inset 0 0 30px rgba(0, 217, 255, 0.1);
+    animation: slideDown 0.6s ease;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #00d9ff;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    text-align: center;
+}
+
+.modal-subtitle {
+    color: #00ffcc;
+    font-size: 14px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.gesture-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-left: 3px solid #00d9ff;
+    background: rgba(0, 217, 255, 0.05);
+    border-radius: 8px;
+}
+
+.gesture-title {
+    color: #00ffcc;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gesture-icon {
+    font-size: 20px;
+}
+
+.gesture-description {
+    color: #00d9ff;
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+.btn-ok {
+    background: linear-gradient(135deg, #00d9ff, #00ffcc);
+    color: #000;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+}
+
+.btn-ok:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 217, 255, 0.6);
+}
+
+.btn-ok:active {
+    transform: translateY(0);
+}
+
+/* ============================================================================
+   CONTROL PANEL - Glass Morphism
+   ============================================================================ */
+
+#controlPanel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(15, 26, 61, 0.7);
+    backdrop-filter: blur(15px);
+    border: 2px solid #00d9ff;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 300px;
+    z-index: 100;
+    box-shadow: 0 0 25px rgba(0, 217, 255, 0.25), inset 0 0 15px rgba(0, 217, 255, 0.08);
+}
+
+.control-title {
+    color: #00d9ff;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+    border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+    padding-bottom: 10px;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.shape-btn {
+    background: linear-gradient(135deg, #00d9ff, #00ffcc);
+    color: #000;
+    border: 2px solid #00d9ff;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+}
+
+.shape-btn:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
+}
+
+.shape-btn.active {
+    background: linear-gradient(135deg, #00ffcc, #00d9ff);
+    box-shadow: 0 0 30px rgba(0, 217, 255, 0.8), inset 0 0 15px rgba(0, 217, 255, 0.3);
+    transform: scale(1.08);
+}
+
+.info-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 217, 255, 0.3);
+}
+
+.info-label {
+    color: #00ffcc;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.info-text {
+    color: #00d9ff;
+    font-size: 11px;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin-bottom: 10px;
+}
+
+.hand-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff0000;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px #ff0000;
+}
+
+.status-dot.active {
+    background: #00ff88;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.status-text {
+    color: #00d9ff;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* ============================================================================
+   CAMERA PREVIEW BOX
+   ============================================================================ */
+
+#videoContainer {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 200px;
+    height: 280px;
+    border: 3px solid #00d9ff;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0f1a3d;
+    z-index: 100;
+    box-shadow: 0 0 25px rgba(0, 217, 255, 0.35), inset 0 0 15px rgba(0, 217, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+#videoContainer:hover {
+    box-shadow: 0 0 40px rgba(0, 217, 255, 0.5), inset 0 0 25px rgba(0, 217, 255, 0.15);
+    border-color: #00ffcc;
+}
+
+#video {
+    width: 100%;
+    height: 100%;
+    transform: scaleX(-1);
+    display: block;
+    object-fit: cover;
+}
+
+.video-label {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    color: #00d9ff;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    pointer-events: none;
+    z-index: 101;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+.video-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #00d9ff;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* ============================================================================
+   STATUS DISPLAY
+   ============================================================================ */
+
+#statusText {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(15, 26, 61, 0.7);
+    backdrop-filter: blur(15px);
+    border: 2px solid #00d9ff;
+    border-radius: 10px;
+    padding: 15px;
+    color: #00d9ff;
+    font-size: 11px;
+    z-index: 100;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 0 25px rgba(0, 217, 255, 0.25), inset 0 0 15px rgba(0, 217, 255, 0.08);
+}
+
+.status-line {
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    line-height: 1.4;
+}
+
+.status-label {
+    color: #00ffcc;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.status-value {
+    color: #00d9ff;
+    text-align: right;
+    min-width: 80px;
+}
+
+/* ============================================================================
+   SCROLLBAR STYLING
+   ============================================================================ */
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(0, 217, 255, 0.1);
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #00d9ff, #00ffcc);
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #00ffcc, #00d9ff);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes glow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
+    }
+}
+
+.glowing {
+    animation: glow 2s infinite;
+}
+
+/* ============================================================================
+   MUSIC MODE STYLES
+   ============================================================================ */
+
+.music-mode-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px solid #ff00ff;
+    border-radius: 10px;
+    background: rgba(255, 0, 255, 0.05);
+}
+
+.music-mode-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ff00ff;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+
+.music-toggle {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #ff00ff 0%, #ff0088 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.music-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+}
+
+.music-toggle.active {
+    background: linear-gradient(135deg, #00ff88 0%, #00ffcc 100%);
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+}
+
+.music-info {
+    font-size: 11px;
+    color: #ff00ff;
+    text-align: center;
+}
+
+/* ============================================================================
+   NEURAL GESTURE STYLES
+   ============================================================================ */
+
+.neural-instructions {
+    margin-top: 15px;
+    padding: 15px;
+    border: 2px solid #00ffcc;
+    border-radius: 10px;
+    background: rgba(0, 255, 204, 0.05);
+}
+
+.instruction-title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #00ffcc;
+    margin-bottom: 8px;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+
+.instruction-item {
+    font-size: 11px;
+    color: #00ffcc;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+}
+
+.instruction-item:last-child {
+    border-bottom: none;
+}
+
+.instruction-label {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: rgba(0, 217, 255, 0.9);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    max-width: 200px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
+    animation: fadeInOut 3s ease-in-out;
+    z-index: 500;
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0;
+    }
+    20%, 80% {
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    #controlPanel {
+        min-width: 250px;
+        padding: 15px;
+    }
+
+    #videoContainer {
+        width: 150px;
+        height: 200px;
+    }
+
+    #statusText {
+        font-size: 10px;
+    }
+
+    .modal-content {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    .music-mode-section {
+        padding: 10px;
+    }
+
+    .neural-instructions {
+        padding: 10px;
+    }
+}

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Particle System - Hand Gesture Control</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Main Canvas -->
+    <canvas id="canvas"></canvas>
+
+    <!-- Gesture Guide Modal -->
+    <div id="gestureModal">
+        <div class="modal-content">
+            <div class="modal-title">⚛️ ATOMIC PARTICLE SYSTEM</div>
+            <div class="modal-subtitle">Explore the Quantum Realm - Like Tony Stark's Iron Core</div>
+
+            <!-- Basic Controls -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">👋</span>
+                    HAND DETECTION
+                </div>
+                <div class="gesture-description">
+                    The system will automatically detect your hand using your webcam. Make sure your hand is clearly visible in the camera preview (bottom-right corner). The status indicator in the control panel will show if your hand is detected.
+                </div>
+            </div>
+
+            <!-- Hand Position Control -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">📍</span>
+                    HAND POSITION CONTROL
+                </div>
+                <div class="gesture-description">
+                    <strong>Center Point:</strong> Your middle finger's MCP joint (knuckle) is tracked as the anchor point for particle manipulation. Move your hand around to see the particles respond to your position. This creates an interactive focal point in 3D space.
+                </div>
+            </div>
+
+            <!-- Pinch Gesture -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">🤏</span>
+                    PINCH GESTURE (EXPLOSION)
+                </div>
+                <div class="gesture-description">
+                    <strong>How it works:</strong> Bring your thumb and index finger close together to perform a pinch gesture. The distance between them controls the "power" of the explosion effect. When you pinch, particles are pushed away from your hand's center position, creating a beautiful expanding wave effect.
+                    <br><br>
+                    <strong>Power Range:</strong> The Power indicator shows 0-100%. Larger pinch = Stronger explosion.
+                </div>
+            </div>
+
+            <!-- Color Control -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">🌈</span>
+                    COLOR SHIFTING (HAND HEIGHT)
+                </div>
+                <div class="gesture-description">
+                    <strong>Move your hand up/down</strong> to change the particle colors. Your hand's vertical position on the camera frame maps directly to the HSL Hue spectrum (0-360°). Move your hand up for warm colors (reds, oranges), down for cool colors (blues, purples).
+                </div>
+            </div>
+
+            <!-- DEEP ZOOM Effect -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">🔬</span>
+                    ZOOM IN GESTURES (30% to 150%)
+                </div>
+                <div class="gesture-description">
+                    <strong>🎯 LEVEL 1 - Single Hand (30% Zoom):</strong> Move one hand toward the camera preview box (bottom-right corner).
+                    <br><br>
+                    <strong>⚛️ LEVEL 2 - Dual Hand Pinch (60% Zoom):</strong> Bring BOTH hands close together in front of camera, like pinching between your palms. The closer your hands = the stronger zoom.
+                    <br><br>
+                    <strong>⚡ LEVEL 3 - ULTRA ZOOM 150%:</strong> Pinch both hands together AND push them toward the camera preview box simultaneously! The particles will violently collapse into the atomic core like you're creating a black hole! Status turns yellow (⚡) when active.
+                    <br><br>
+                    <strong>💫 STAYS COMPRESSED:</strong> Once zoomed, particles stay in that compressed state even if you release your hands. Only spread your fingers/hands to unzoom!
+                </div>
+            </div>
+
+            <!-- UNZOOM Effect -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">💥</span>
+                    UNZOOM GESTURES (Reverse Compression)
+                </div>
+                <div class="gesture-description">
+                    <strong>🤌 SINGLE HAND UNZOOM (150%):</strong> Pinch your thumb and index finger together, then spread them apart quickly! Particles expand outward violently. Status shows orange (🤌 SINGLE UNZOOM 150%).
+                    <br><br>
+                    <strong>💥 DUAL HAND UNZOOM (300%):</strong> Bring both hands close together (like a double pinch), then quickly separate them apart! The dual-hand separation creates a massive explosion effect. Status shows magenta (💥 DOUBLE UNZOOM 300%).
+                    <br><br>
+                    <strong>⚠️ KEY POINT:</strong> The spread motion triggers unzoom - opening your fingers/hands is the gesture, not just releasing them!
+                </div>
+            </div>
+
+            <!-- Shape Selection -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">✨</span>
+                    SHAPE SELECTION
+                </div>
+                <div class="gesture-description">
+                    <strong>Available Shapes:</strong>
+                    <br>❤️ <strong>Heart:</strong> Beautiful parametric heart curve
+                    <br>🪐 <strong>Saturn:</strong> Planet with rings (Fibonacci sphere)
+                    <br>🌹 <strong>Flower:</strong> Rose curve with 5 petals
+                    <br>✨ <strong>Fireworks:</strong> Radial explosion pattern
+                    <br>⭐ <strong>Sphere:</strong> Perfect uniform 3D ball
+                    <br><br>Click any button to smoothly transition to that shape.
+                </div>
+            </div>
+
+            <!-- Advanced Features -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">⚡</span>
+                    ADVANCED FEATURES
+                </div>
+                <div class="gesture-description">
+                    <strong>Brownian Motion:</strong> Particles have subtle random movement for a "living swarm" feel.
+                    <br><br>
+                    <strong>Auto-Rotation:</strong> The particle system rotates continuously. Hand speed increases rotation rate.
+                    <br><br>
+                    <strong>Smooth Lerping:</strong> Particles smoothly transition between shapes using interpolation.
+                    <br><br>
+                    <strong>Glow Effects:</strong> Particles emit additive blending for a neon aesthetic.
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="gesture-section">
+                <div class="gesture-title">
+                    <span class="gesture-icon">💡</span>
+                    PRO TIPS
+                </div>
+                <div class="gesture-description">
+                    ✓ <strong>Zoom In:</strong> Single hand toward camera (30%), dual pinch (60%), ultra pinch + camera (150%)
+                    <br>
+                    ✓ <strong>Stay Compressed:</strong> Particles remain zoomed even after hands are removed
+                    <br>
+                    ✓ <strong>Unzoom Out:</strong> Spread fingers/hands apart to reverse compression
+                    <br>
+                    ✓ Single hand spread = 150% unzoom (orange status 🤌)
+                    <br>
+                    ✓ Dual hand spread = 300% unzoom (magenta status 💥)
+                    <br>
+                    ✓ Thumb + Index pinch = Electron burst explosion (when zoomed)
+                    <br>
+                    ✓ Watch status indicator colors: Green → Yellow (zoom) → Orange/Magenta (unzoom)
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="modal-buttons">
+                <button class="btn-ok" onclick="closeGestureModal()">Enter Quantum Realm 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div id="controlPanel">
+        <div class="control-title">⚛️ Atomic Control</div>
+        <div class="button-group">
+            <button class="shape-btn active" data-shape="heart">❤️ Heart</button>
+            <button class="shape-btn" data-shape="saturn">🪐 Saturn</button>
+            <button class="shape-btn" data-shape="flower">🌹 Flower</button>
+            <button class="shape-btn" data-shape="fireworks">✨ Fireworks</button>
+            <button class="shape-btn" data-shape="sphere">⭐ Sphere</button>
+            <button class="shape-btn" data-shape="dna">🧬 DNA</button>
+            <button class="shape-btn" data-shape="torus">🍩 Torus</button>
+        </div>
+
+        <!-- Music Mode Toggle -->
+        <div class="music-mode-section">
+            <div class="music-mode-title">🎵 MUSIC MODE (Optional)</div>
+            <button class="music-toggle" id="musicToggleBtn" onclick="toggleMusicMode()">
+                🎧 Enable Music Sync
+            </button>
+            <div class="music-info">Music sync animates sphere to beat frequencies</div>
+        </div>
+
+        <div class="info-section">
+            <div class="info-label">Hand Status</div>
+            <div class="hand-status">
+                <div class="status-dot" id="statusDot"></div>
+                <div class="status-text" id="handStatus">Initializing...</div>
+            </div>
+            <div class="info-text" style="margin-top: 10px;">
+                Position your hand in front of the camera to begin controlling the particles.
+            </div>
+        </div>
+
+        <!-- Neural Gesture Instructions -->
+        <div class="neural-instructions">
+            <div class="instruction-title">🧠 NEURAL GESTURES</div>
+            <div class="instruction-item">✊ FIST → Black Hole Collapse (Max Zoom)</div>
+            <div class="instruction-item">✌️ VICTORY → Saturn Shape Auto</div>
+            <div class="instruction-item">🖐️ OPEN PALM → Fingertip Magnetism</div>
+        </div>
+
+        <!-- Auto Instruction Label (floating near video) -->
+        <div id="instructionLabel" class="instruction-label"></div>
+    </div>
+
+    <!-- Webcam Preview -->
+    <div id="videoContainer">
+        <div class="video-label">📷 CAMERA</div>
+        <video id="video" autoplay playsinline muted></video>
+        <div class="video-loading">Loading camera...</div>
+    </div>
+
+    <!-- Status Display -->
+    <div id="statusText">
+        <div class="status-line">
+            <span class="status-label">Particles:</span>
+            <span class="status-value"><span id="particleCount">0</span></span>
+        </div>
+        <div class="status-line">
+            <span class="status-label">FPS:</span>
+            <span class="status-value"><span id="fps">0</span> /60</span>
+        </div>
+        <div class="status-line">
+            <span class="status-label">Hand Power:</span>
+            <span class="status-value"><span id="handPower">0</span>%</span>
+        </div>
+    </div>
+
+    <!-- Three.js + Effects Composer (for Bloom) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+    <!-- Engine & Core Logic (NEW v2.0) -->
+    <script src="engine-v2.js"></script>
+
+    <!-- Main Application -->
+    <script>
+        // ============================================================================
+        // APPLICATION CONFIGURATION
+        // ============================================================================
+
+        const APP_CONFIG = {
+            particleCount: 10000,
+            lerpFactor: 0.05,
+            brownianMotion: 0.002,
+            autoRotationSpeed: 0.0005,
+            particleSize: 3,
+            defaultShape: 'heart'
+        };
+
+        // ============================================================================
+        // GLOBAL INSTANCES
+        // ============================================================================
+
+        let engine = null;
+        let handTracker = null;
+        let stats = null;
+        let currentShape = APP_CONFIG.defaultShape;
+        let animationRunning = false;
+        
+        // MUSIC MODE VARIABLES
+        let musicModeEnabled = false;
+        let audioContext = null;
+        let analyser = null;
+        let frequencyData = null;
+        let mediaStream = null;
+
+        // ============================================================================
+        // MUSIC MODE FUNCTIONS
+        // ============================================================================
+
+        async function toggleMusicMode() {
+            const btn = document.getElementById('musicToggleBtn');
+            
+            if (musicModeEnabled) {
+                // Disable music mode
+                musicModeEnabled = false;
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                }
+                btn.textContent = '🎧 Enable Music Sync';
+                btn.classList.remove('active');
+                return;
+            }
+
+            // Enable music mode
+            try {
+                // Request microphone access
+                mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                // Create audio context
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 256;
+
+                const source = audioContext.createMediaStreamSource(mediaStream);
+                source.connect(analyser);
+
+                frequencyData = new Uint8Array(analyser.frequencyBinCount);
+                musicModeEnabled = true;
+
+                btn.textContent = '🎧 Disable Music Sync';
+                btn.classList.add('active');
+                
+                console.log('Music mode enabled - listening to microphone');
+            } catch (error) {
+                console.error('Microphone access denied:', error);
+                alert('Microphone access required for music mode');
+            }
+        }
+
+        function updateAudioReactivity() {
+            if (!musicModeEnabled || !analyser || !engine) return;
+
+            analyser.getByteFrequencyData(frequencyData);
+            engine.updateByAudio(frequencyData);
+        }
+
+        // ============================================================================
+        // MODAL MANAGEMENT
+        // ============================================================================
+
+        function closeGestureModal() {
+            const modal = document.getElementById('gestureModal');
+            modal.style.animation = 'modalFadeIn 0.6s ease reverse';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 600);
+        }
+
+        // ============================================================================
+        // INITIALIZATION
+        // ============================================================================
+
+        async function initApplication() {
+            try {
+                // Wait for Three.js to load
+                await waitForLibraries();
+
+                // Initialize Particle System Engine
+                engine = new ParticleSystemEngine(APP_CONFIG);
+                window.engine = engine; // Global reference for hand tracker
+                engine.init();
+
+                // Initialize Hand Tracking
+                handTracker = new HandTrackingManager();
+                await handTracker.init();
+
+                // Initialize Stats Manager
+                stats = new StatsManager(APP_CONFIG.particleCount);
+
+                // Setup UI Controls
+                setupUIControls();
+
+                // Start animation loop
+                animationRunning = true;
+                animate();
+
+            } catch (error) {
+                console.error('Application initialization failed:', error);
+                alert('Failed to initialize. Check console for details.');
+            }
+        }
+
+        function waitForLibraries() {
+            return new Promise((resolve) => {
+                const checkLibraries = setInterval(() => {
+                    if (window.THREE && window.Hands) {
+                        clearInterval(checkLibraries);
+                        resolve();
+                    }
+                }, 100);
+
+                // Timeout after 30 seconds
+                setTimeout(() => {
+                    clearInterval(checkLibraries);
+                    resolve();
+                }, 30000);
+            });
+        }
+
+        // ============================================================================
+        // UI CONTROLS SETUP
+        // ============================================================================
+
+        function setupUIControls() {
+            const buttons = document.querySelectorAll('.shape-btn');
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const shape = btn.dataset.shape;
+                    currentShape = shape;
+                    engine.changeShape(shape);
+                });
+            });
+        }
+
+        // ============================================================================
+        // ANIMATION LOOP
+        // ============================================================================
+
+        function animate() {
+            if (!animationRunning) return;
+            requestAnimationFrame(animate);
+
+            if (!engine) return;
+
+            // Get hand data
+            const handData = handTracker ? handTracker.getHandData() : {
+                detected: false,
+                centerX: 0,
+                centerY: 0,
+                power: 0,
+                hue: 0,
+                zoomFactor: 0,
+                unzoomFactor: 0,
+                handState: 'NEUTRAL'
+            };
+
+            // Update music reactivity if enabled
+            updateAudioReactivity();
+
+            // Update particle system with physics
+            engine.updatePositions(handData);
+
+            // Update status
+            if (stats) {
+                stats.update(APP_CONFIG.particleCount, handData);
+            }
+
+            // Update status dot
+            updateStatusDot(handData.detected);
+
+            // Render with bloom effects
+            engine.render();
+        }
+
+        function updateStatusDot(detected) {
+            const dot = document.getElementById('statusDot');
+            if (detected) {
+                dot.classList.add('active');
+                dot.style.background = '#00ff88';
+            } else {
+                dot.classList.remove('active');
+                dot.style.background = '#ff3333';
+            }
+        }
+
+        // ============================================================================
+        // STARTUP
+        // ============================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initApplication();
+        });
+
+        // Cleanup on unload
+        window.addEventListener('beforeunload', () => {
+            animationRunning = false;
+        });
+    </script>
+</body>
+</html>
