@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Matching Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Memory Matching Game</h1>
+        <div class="stats">
+            <p>Moves: <span id="move-counter">0</span></p>
+            <p>Time: <span id="timer">0:00</span></p>
+        </div>
+        <div class="difficulty-selector">
+            <label for="difficulty">Select Difficulty:</label>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+                <option value="difficult">Difficult</option>
+                <option value="extra-difficult">Extra Difficult</option>
+            </select>
+        </div>
+        <div class="card-grid" id="card-grid">
+            <!-- Cards will be dynamically generated here -->
+        </div>
+        <div class="win-message" id="win-message">
+            <h2>Congratulations! You Win!</h2>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+</body>
+</html>

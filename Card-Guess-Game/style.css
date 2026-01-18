@@ -1,0 +1,106 @@
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container for the game */
+.container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Grid layout for the cards */
+#card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Styling for individual cards */
+.card {
+    width: 100px;
+    height: 150px;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s;
+}
+
+/* Hover effect for cards */
+.card:hover {
+    transform: scale(1.1);
+    background: #e9ecef;
+}
+
+/* Styling for hidden cards */
+.card.hidden {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* Icon styling inside cards */
+.card i {
+    font-size: 2rem;
+}
+
+/* Styling for the message */
+.message {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+/* Styling for the result message */
+#result-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* Styling for buttons */
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1em;
+    background: #66a6ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+/* Hover effect for buttons */
+button:hover {
+    background: #89f7fe;
+}
+
+/* Styling for the restart button */
+#restart-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background: #66a6ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#restart-button:hover {
+    background: #89f7fe;
+}
